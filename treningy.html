@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tvoj tréningový plán</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Tvoj tréningový plán pre cieľ: <span id="nazovCielu"></span></h1>
+
+  <div>
+    <button id="variantA" class="variant-btn active" onclick="zmenVariant('A')">Variant A</button>
+    <button id="variantB" class="variant-btn" onclick="zmenVariant('B')">Variant B</button>
+  </div>
+
+  <div id="plany"></div>
+  <div id="odporucanie"></div>
+
+  <a href="index.html">← Späť</a>
+
+  <script>
+    const ciel = localStorage.getItem("ciel");
+    const vaha = parseFloat(localStorage.getItem("vaha"));
+    let aktualnyVariant = "A";
+
+    // Váš pôvodný objekt 'plany' (zostáva nezmenený)
+    const plany = {
+      naberanie: {
+        A: [
+          {
+            den: "Pondelok – Hrudník + Triceps",
+            cviky: [
+              { nazov: "Bench press", popis: "Ťažšia váha, 6–8 opakovaní, výbušne hore. 4 série." },
+              { nazov: "Kliky na bradlách", popis: "Stredná váha, 8–10 opakovaní. 3 série." },
+              { nazov: "Francúzsky tlak", popis: "Stredná váha, 10 opakovaní. 3 série." }
+            ]
+          },
+          {
+            den: "Streda – Chrbát + Biceps",
+            cviky: [
+              { nazov: "Mŕtvy ťah", popis: "Ťažká váha, 5–8 opakovaní. 3 série." },
+              { nazov: "Príťahy v predklone", popis: "Stredná váha, 8–10 opakovaní. 4 série." },
+              { nazov: "Biceps s činkami", popis: "Pomalé tempo, 10–12 opakovaní. 3 série." }
+            ]
+          }
+           ,
+          {
+            den: "Piatok – Nohy + Ramená",
+            cviky: [
+              { nazov: "Drepy", popis: "Ťažká váha, 6–8 opakovaní. 4 série." },
+              { nazov: "Tlaky na ramena v stoji", popis: "Stredná váha, 8–10 opakovaní. 3 série." },
+              { nazov: "Výpony lýtok", popis: "Pomalé tempo, 15–20 opakovaní. 3 série." }
+            ]
+          }
+        ],
+        B: [
+          {
+            den: "Pondelok – Celé Telo (Fullbody)",
+            cviky: [
+              { nazov: "Drepy", popis: "3 série, 10 opakovaní, stredná váha." },
+              { nazov: "Bench press", popis: "3 série, 10 opakovaní, stredná váha." },
+              { nazov: "Príťahy jednoručky", popis: "3 série, 12 opakovaní na ruku." }
+            ]
+          },
+          {
+            den: "Štvrtok – Celé Telo (Fullbody)",
+            cviky: [
+              { nazov: "Mŕtvy ťah", popis: "3 série, 5 opakovaní, ťažšia váha." },
+              { nazov: "Tlaky nad hlavu", popis: "3 série, 10 opakovaní." },
+              { nazov: "Biceps s činkami", popis: "3 série, 12 opakovaní." }
+            ]
+          }
+        ]
+      },
+      chudnutie: {
+        A: [
+          {
+            den: "Pondelok – Kruhový tréning (Vyšší tep)",
+            cviky: [
+              { nazov: "Drepy s vlastnou váhou", popis: "3 série, 20 opakovaní." },
+              { nazov: "Kliky", popis: "3 série, max. opakovaní." },
+              { nazov: "Angličáky (Burpees)", popis: "3 série, 10 opakovaní, rýchle tempo." }
+            ]
+          },
+          {
+            den: "Streda – Silový tréning + Kardio",
+            cviky: [
+              { nazov: "Mŕtvy ťah", popis: "3 série, 10 opakovaní, mierna váha." },
+              { nazov: "Tlaky na ramená v stoji", popis: "3 série, 12 opakovaní." },
+              { nazov: "Beh", popis: "30 minút, stredná intenzita." }
+            ]
+          },
+          {
+            den: "Piatok – HIIT + Brucho",
+            cviky: [
+              { nazov: "Beh", popis: "20 minút, striedanie 30s rýchlo/60s pomaly." },
+              { nazov: "Drevená doska (Plank)", popis: "3x 60 sekúnd." }
+            ]
+          }
+        ],
+        B: [
+          {
+            den: "Utorok – Celé telo (Zameranie na nohy)",
+            cviky: [
+              { nazov: "Výpady", popis: "3 série, 15 na nohu." },
+              { nazov: "Bench press", popis: "3 série, 12 opakovaní, ľahká váha." },
+              { nazov: "Príťahy s lanom", popis: "3 série, 15 opakovaní." }
+            ]
+          },
+          {
+            den: "Štvrtok – Celé telo (Zameranie na hornú časť)",
+            cviky: [
+              { nazov: "Tlaky jednoručiek", popis: "3 série, 12 opakovaní." },
+              { nazov: "Tricepsové sťahovanie", popis: "3 série, 15 opakovaní." },
+              { nazov: "Biceps s činkami", popis: "3 série, 15 opakovaní." }
+            ]
+          }
+        ]
+      },
+      udrzanie: {
+        A: [
+          {
+            den: "Pondelok – Fullbody (Silovo-kondičný)",
+            cviky: [
+              { nazov: "Drepy", popis: "3 série, 10 opakovaní." },
+              { nazov: "Bench press", popis: "3 série, 10 opakovaní." },
+              { nazov: "Mŕtvy ťah", popis: "3 série, 8 opakovaní." }
+            ]
+          },
+          {
+            den: "Štvrtok – Fullbody (Flexibilita + Vytrvalosť)",
+            cviky: [
+              { nazov: "Tlaky na ramena v stoji", popis: "3 série, 12 opakovaní." },
+              { nazov: "Veslovanie", popis: "15 minút, stabilné tempo." },
+              { nazov: "Jóga/Strečing", popis: "15 minút." }
+            ]
+          }
+        ],
+        B: [
+          {
+            den: "Utorok – Telo a Kardio",
+            cviky: [
+              { nazov: "Plávanie", popis: "30 minút." },
+              { nazov: "Kettlebell swing", popis: "3 série, 15 opakovaní." },
+              { nazov: "Skracovačky", popis: "4 série, 20 opakovaní." }
+            ]
+          },
+          {
+            den: "Piatok – Telo a Jóga/Pilates",
+            cviky: [
+              { nazov: "Bicyklovanie", popis: "45 minút." },
+              { nazov: "Drepy s vlastnou váhou", popis: "3 série, 20 opakovaní." },
+              { nazov: "Plank", popis: "3x 60 sekúnd." }
+            ]
+          }
+        ]
+      }
+    };
+
+    const odporucania = {
+      naberanie: "Cvič 4–5 dní v týždni, zameraj sa na progresívne zvyšovanie váh. Jedz v kalorickom nadbytku (+300 až +500 kcal).",
+      chudnutie: "Cvič 3–4 dni v týždni (Kardio + Silový). Jedz v kalorickom deficite (–300 až –500 kcal). Zvýš príjem bielkovín.",
+      udrzanie: "Cvič 3 dni v týždni. Kombinuj silový tréning s kardio a flexibilitou. Kalórie udržuj na úrovni bazálneho metabolizmu."
+    };
+    
+    const nazvyCielov = {
+        naberanie: "Naberanie svalovej hmoty",
+        chudnutie: "Chudnutie a redukcia tuku",
+        udrzanie: "Zostať fit (udržanie kondície)"
+    };
+
+
+    // Opravená funkcia (boli chyby v zátvorkách v pôvodnom kóde)
+    function getCvikImage(nazov) {
+      let nazovPreObrazok = nazov.toLowerCase()
+        .replace(/ /g, '_')
+        .replace(/č/g, 'c')
+        .replace(/ý/g, 'y')
+        .replace(/ú/g, 'u')
+        .replace(/á/g, 'a')
+        .replace(/é/g, 'e')
+        .replace(/í/g, 'i')
+        .replace(/ľ/g, 'l')
+        .replace(/ť/g, 't')
+        .replace(/ň/g, 'n')
+        .replace(/š/g, 's')
+        .replace(/ž/g, 'z')
+        .replace(/ô/g, 'o')
+        .replace(/ä/g, 'a')
+        .replace(/[^\w-]/g, '');
+
+        if (nazov.toLowerCase().includes("mŕtvy ťah")) return "mrtvy_tah.png";
+        if (nazov.toLowerCase().includes("bench press")) return "bench_press.png";
+        if (nazov.toLowerCase().includes("drepy")) return "drepy.png";
+        if (nazov.toLowerCase().includes("tlaky nad hlavu")) return "tlaky_nad_hlavou.png"; 
+        if (nazov.toLowerCase().includes("veslovanie")) return "veslovanie.png";
+        if (nazov.toLowerCase().includes("jóga")) return "joga.png";
+        if (nazov.toLowerCase().includes("bicyklovanie(indoor/outdoor)")) return "bicyklovanie_outdoor_indoor.png";
+
+
+      return `${nazovPreObrazok}.png`;
+    }
+
+
+    function zobrazPlan() {
+      const planBox = document.getElementById("plany");
+      const odporBox = document.getElementById("odporucanie");
+      const nazovCieluElement = document.getElementById("nazovCielu");
+      planBox.innerHTML = "";
+
+      nazovCieluElement.textContent = nazvyCielov[ciel] || "Tréningový plán";
+
+      if (ciel && plany[ciel] && plany[ciel][aktualnyVariant]) {
+
+        plany[ciel][aktualnyVariant].forEach((den, j) => {
+
+          const div = document.createElement("div");
+          div.className = "plan";
+
+          // Pridanie názvu dňa
+          div.innerHTML = `<h3>${den.den}</h3>`;
+
+          den.cviky.forEach((c, i) => {
+              const idVysledku = `vysledok-${ciel}-${aktualnyVariant}-${j}-${i}`;
+              const nazovObrazku = getCvikImage(c.nazov);
+              const triedaZarovnania = (i % 2 === 0) ? 'odd' : 'even'; // Striedanie tried
+
+              setTimeout(() => {
+                vypocitaj(c.nazov, idVysledku);
+              }, 0);
+
+              const cvikHTML = `
+                <div class='cvik-container ${triedaZarovnania}'> 
+                  
+                  <div class="cvik-obrazok"> 
+                    <p class="nazov-cviku-obrazok">${c.nazov}</p>
+                    <img src="Galeria/${nazovObrazku}" alt="${c.nazov}">
+                  </div>
+
+                  <div class='cvik'>
+                    <strong>${c.nazov}</strong><br>${c.popis}
+                    <div id="${idVysledku}" class="vysledok-staticky"></div>
+                  </div>
+                  
+                </div>
+              `;
+              
+              div.innerHTML += cvikHTML;
+          });
+
+          planBox.appendChild(div);
+        });
+
+        odporBox.innerHTML = `
+          <div class="odporucanie">
+            <h2>Odporúčania</h2>
+            <p>${odporucania[ciel]}</p>
+          </div>`;
+      }
+    }
+
+    function vypocitaj(nazov, vysId) {
+      const vysledokElement = document.getElementById(vysId);
+      const w = vaha;
+
+      if (!vysledokElement) return;
+
+      if (!w || w < 10 || w > 300) {
+        vysledokElement.innerHTML = `<span style="color:red;">Zadaj platnú hmotnosť.</span>`;
+        return;
+      }
+
+      let multiplikator = 1.0;
+      let nazovN = nazov.toLowerCase();
+
+      if (nazovN.includes("drep") || nazovN.includes("výpady")) multiplikator = 1.5;
+      else if (nazovN.includes("mŕtvy")) multiplikator = 1.75;
+      else if (nazovN.includes("bench") || nazovN.includes("bradlách")) multiplikator = 0.9;
+      else if (nazovN.includes("tlaky nad hlavu")) multiplikator = 0.6;
+      else if (nazovN.includes("biceps")) multiplikator = 0.35;
+      else if (nazovN.includes("triceps") || nazovN.includes("francúzsky")) multiplikator = 0.4;
+      else if (nazovN.includes("príťahy")) multiplikator = 0.7;
+
+      const ideal = (w * multiplikator).toFixed(1);
+
+      vysledokElement.innerHTML = `
+        🏋️‍♂️ Odporúčaná váha pre cvik : <strong>${ideal} kg</strong> 💪💥
+      `;
+    }
+
+    function zmenVariant(variant) {
+      aktualnyVariant = variant;
+      document.getElementById("variantA").classList.toggle("active", variant === "A");
+      document.getElementById("variantB").classList.toggle("active", variant === "B");
+      zobrazPlan();
+    }
+
+    zobrazPlan();
+  </script>
+
+<p>
+Informácie sú orientačné. Pred cvičením sa poraď s trénerom. Používaš na vlastné riziko.
+</p>
+
+</body>
+</html>
