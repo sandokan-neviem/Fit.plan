@@ -1,0 +1,228 @@
+/* ========================================================= */
+/* --- ŠTÝLY PRE INDEX.HTML A GLOBÁLNE ELEMENTY --- */
+/* (Tieto štýly zostávajú nezmenené, aby neovplyvnili index.html) */
+/* ========================================================= */
+body {
+    background-color: #222;
+    color: white;
+    font-family: Arial, sans-serif;
+    /* Centrálne zarovnanie textu v celom tele */
+    text-align: center;
+}
+h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+nav {
+    margin: 20px 0;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    border: 1px solid white;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+nav a:hover {
+    background: white;
+    color: black;
+}
+
+form {
+    display: inline-block;
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+input,
+select,
+button {
+    display: block;
+    margin: 10px auto;
+    padding: 8px;
+    width: 200px;
+    border: none;
+    border-radius: 5px;
+}
+
+button {
+    background: white;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.logo {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-weight: bold;
+}
+
+#vysledok {
+    margin-top: 30px;
+    background: #333;
+    padding: 15px;
+    border-radius: 10px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a {
+    color: white;
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    border: 1px solid white;
+    padding: 5px 10px;
+    border-radius: 8px;
+}
+
+a:hover {
+    background: white;
+    color: black;
+}
+
+
+/* ========================================================= */
+/* --- ŠTÝLY PRE TRENINGY.HTML (Plán, Odporúčanie, Variant) --- */
+/* ========================================================= */
+
+.plan {
+    background: #333;
+    margin: 15px auto;
+    padding: 15px;
+    border-radius: 10px;
+    width: 80%;
+    text-align: center; 
+}
+
+.plan h3 {
+    color: #f7c331;
+}
+
+.odporucanie {
+    margin-top: 30px;
+    background: #333;
+    padding: 15px;
+    border-radius: 10px;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.variant-btn {
+    background: white;
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+}
+
+.variant-btn.active {
+    background: #f7c331;
+}
+
+
+/* ========================================================= */
+/* ... (Globálne štýly pre index.html zostávajú hore nezmenené) ... */
+
+
+/* ========================================================= */
+/* --- DETAIL CVIKU S JEDNOTNÝM ZAROVNANÍM (treningy.html) --- */
+/* ========================================================= */
+
+.cvik strong {
+    color: #87ceeb;
+}
+
+/* Flexbox kontajner pre zarovnanie popisu a obrázku */
+.cvik-container {
+    display: flex; 
+    width: 95%; 
+    max-width: 700px; 
+    margin: 20px auto; 
+    align-items: center; 
+    padding: 10px;
+    border-bottom: 1px solid #444; 
+    text-align: initial; 
+}
+
+.cvik-container:last-child {
+    border-bottom: none; 
+}
+
+/* Kontajner pre popis cviku */
+.cvik {
+    flex-grow: 1; 
+    padding: 0 15px; 
+    margin-bottom: 0; 
+    /* KLÚČOVÁ ZMENA: Všetok text vždy zarovnaný doľava */
+    text-align: left; 
+}
+
+/* Štýl pre box s obrázkom */
+.cvik-obrazok {
+    flex-shrink: 0; 
+    text-align: center; 
+}
+
+/* Veľkosť obrázku: 140px */
+.cvik-obrazok img {
+    width: 140px; 
+    height: auto;
+    display: block; 
+    border-radius: 5px; 
+    background-color: #1a1a1a; 
+    margin-top: 5px; 
+}
+
+/* Názov cviku nad obrázkom */
+.nazov-cviku-obrazok {
+    font-weight: bold;
+    color: #f7c331; 
+    margin: 0;
+    font-size: 0.9em;
+}
+
+
+/* --- PRAVIDLO PRE JEDNOTNÉ ZAROVNANIE (Obrázok VĽAVO, Text VPRAVO) --- */
+.cvik-container.jednotne-zarovnanie {
+    /* Predvolené zarovnanie: Obrázok vľavo, Text vpravo */
+    flex-direction: row; 
+}
+
+/* Staré pravidlá pre .odd a .even boli odstránené. */
+
+
+/* NOVÝ ŠTÝL pre zobrazenie váhy */
+.vysledok-staticky {
+    margin-top: 8px;
+    background: #444444; 
+    color: #cccccc; 
+    padding: 8px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #f0c14b; 
+    display: flex;
+    /* Zarovnanie odporúčanej váhy doľava */
+    justify-content: flex-start; 
+    align-items: center;
+    gap: 8px;
+    font-size: 1em;
+}
+
+.vysledok-staticky strong {
+    color: white; 
+}
